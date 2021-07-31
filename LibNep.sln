@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31521.260
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibNep", "LibNep\LibNep.csproj", "{F871A3DA-1F83-42F2-AA0D-25DA69F5030E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F871A3DA-1F83-42F2-AA0D-25DA69F5030E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F871A3DA-1F83-42F2-AA0D-25DA69F5030E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F871A3DA-1F83-42F2-AA0D-25DA69F5030E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F871A3DA-1F83-42F2-AA0D-25DA69F5030E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D20C0582-2323-4513-B0D9-A68E9DC57C6A}
+	EndGlobalSection
+EndGlobal
