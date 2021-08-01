@@ -9,11 +9,11 @@ namespace LibNep.FileFormats
     {
         static byte[] magic = { 0x54, 0x49, 0x44 };
         DataReader reader;
-        public byte version;
-        public string Name;
-        public int Width;
-        public int Height;
-        public int DataLength;
+        public byte version = 0x0;
+        public string Name = "";
+        public int Width = 0;
+        public int Height = 0;
+        public int DataLength = 0;
 
         public TID(string path)
         {

@@ -13,9 +13,15 @@ namespace LibNep.CLI
                 case "TID":
                     TID tid = new TID(args[1]);
                     Console.WriteLine("Name: " + tid.Name);
-                    Console.WriteLine("Version: " + tid.version);
+                    Console.WriteLine("Version: 0x" + tid.version.ToString("x"));
                     Console.WriteLine("Width: " + tid.Width);
                     Console.WriteLine("Height: " + tid.Height);
+                    break;
+                case "CL3":
+                    CL3 cL3 = new CL3(args[1]);
+                    break;
+                case "SSA":
+                    SSA ssa = new SSA(args[1]);
                     break;
             }
         }
