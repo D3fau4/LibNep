@@ -82,14 +82,17 @@ namespace LibNep.FileFormats
             else 
                 data = reader.ReadBytes(DataLength);
 
-            if (CompressionType == CompressionType.None){
-                if (version == 0x9A)
-                    throw new NotImplementedException();
-                else if ((version & 0x02) == 0x02)
+            if (CompressionType == CompressionType.None)
+            {
+                if ((version & 0x02) == 0x02)
                     data = BitmapArrayTools.Swap32BppColorChannels(data, 3, 2, 1, 0);
                 else
                     data = BitmapArrayTools.Swap32BppColorChannels(data, 2, 1, 0, 3);
             }
+            else if (CompressionType == CompressionType.DXT1)
+                data = DxtDecompressor.DecompressDxt(data, Width, Height, CompressionType.DXT1);
+            else
+                data = DxtDecompressor.DecompressDxt(data, Width, Height, CompressionType.DXT5);
 
             var bitmap = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
             var bitmapdata = bitmap.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);

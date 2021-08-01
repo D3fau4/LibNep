@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibNep.FileFormats
+namespace LibNep.Images
 {
     public enum CompressionType
     {
         None = 0,
-        DTX1 = 0x31545844,
-        DTX5 = 0x35545844,
+        DXT1 = 0x31545844,
+        DXT5 = 0x35545844,
     }
 }
