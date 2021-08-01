@@ -2,7 +2,7 @@
   "profiles": {
     "LibNep.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "SSA \"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Neptunia Rebirth2\\neptools\\data\\GAME\\menu\\title.tid\""
+      "commandLineArgs": "TID \"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Neptunia Rebirth2\\neptools\\data\\GAME\\menu\\title.tid\""
     }
   }
 }

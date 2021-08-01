@@ -16,6 +16,7 @@ namespace LibNep.CLI
                     Console.WriteLine("Version: 0x" + tid.version.ToString("x"));
                     Console.WriteLine("Width: " + tid.Width);
                     Console.WriteLine("Height: " + tid.Height);
+                    Console.WriteLine("Data Lenght: " + tid.DataLength);
                     break;
                 case "CL3":
                     CL3 cL3 = new CL3(args[1]);
