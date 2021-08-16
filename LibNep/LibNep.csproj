@@ -1,11 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>Lib for load Neptunia games file formats</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
+    <RepositoryUrl>https://github.com/D3fau4/LibNep</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Neptunia; Hyperdimension; Hyperdimension-Neptunia;</PackageTags>
+    <Authors>D3fau4;</Authors>
   </PropertyGroup>
 
   <ItemGroup>

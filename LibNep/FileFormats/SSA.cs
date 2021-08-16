@@ -51,7 +51,6 @@ namespace LibNep.FileFormats
             // Read the number of entrys/parts
             reader.Stream.Seek(0x14 + origin);
             PartsCount = reader.ReadInt32();
-            //parts = new PART[PartsCount]();
             
             // Frames per second (?)
             reader.Stream.Seek(0x18 + origin);
