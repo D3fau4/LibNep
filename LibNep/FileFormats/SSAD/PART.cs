@@ -40,6 +40,7 @@ namespace LibNep.FileFormats.SSAD
         }
 
         public readonly byte[] PART_magic = { 0x50, 0x41, 0x52, 0x54 };
+        public readonly byte[] AREA_magic = { 0x41, 0x52, 0x45, 0x41 };
         public readonly byte[] POSX_magic = { 0x50, 0x4F, 0x53, 0x58 };
         public readonly byte[] POSY_magic = { 0x50, 0x4F, 0x53, 0x59 };
         public readonly byte[] SCAX_magic = { 0x53, 0x43, 0x41, 0x58 };
@@ -51,6 +52,53 @@ namespace LibNep.FileFormats.SSAD
         public ORG _org;
         public POS _pos;
         public SCA _sca;
+
+        public void Upscale(DataReader reader, DataWriter writer,int upsize)
+        {
+            try
+            {
+                while (true)
+                {
+                    var _magic = reader.ReadInt32();
+
+                    if (_magic == 0x41455241)
+                    {
+                        writer.Write(_magic);
+                        var size = reader.ReadInt32();
+                        writer.Write(size);
+                        for (int i = 0; i < size / 4; i++)
+                        {
+                            writer.Write(reader.ReadInt32() * upsize);
+                        }
+                    }
+                    else if (_magic == 0x58414353 || _magic == 0x59414353 || _magic == 0x58534F50 || _magic == 0x59534F50)
+                    {
+                        writer.Write(_magic);
+                        var size = reader.ReadInt32();
+                        writer.Write(size);
+                        for (int i = 0; i < size / 4; i++)
+                        {
+                            var tmp = reader.ReadInt32();
+                            if (tmp > 1)
+                            {
+                                writer.Write(tmp / upsize);
+                            }
+                            else
+                            {
+                                writer.Write(tmp);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        writer.Write(_magic);
+                    }
+                }
+            } catch (Exception ex)
+            {
+                writer.Write('\0');
+            }
+        }
 
         public List<PART> GetPARTs(DataReader reader, int numberofentrys)
         {

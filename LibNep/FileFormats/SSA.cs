@@ -13,13 +13,16 @@ namespace LibNep.FileFormats
     {
         static byte[] magic = { 0x53, 0x53, 0x41, 0x44 };
         DataReader reader;
+        DataWriter writer;
         int version;
         int PartsCount;
         int FPS;
         PART[] parts;
+        string filepath;
 
         public SSA(string path)
         {
+            filepath = path;
             var stream = DataStreamFactory.FromFile(path, FileOpenMode.Read);
             reader = new DataReader(stream);
             reader.DefaultEncoding = Encoding.GetEncoding(932);
@@ -62,6 +65,16 @@ namespace LibNep.FileFormats
 
             // Read parts
             List<PART> parts = new PART().GetPARTs(reader, PartsCount);
+        }
+
+        public void Upscale(int upsize)
+        {
+            reader.Stream.Position = 0;
+            if (!Directory.Exists("output"))
+                Directory.CreateDirectory("output");
+            var stream = DataStreamFactory.FromFile(Path.Combine("output", Path.GetFileName(filepath)), FileOpenMode.Write);
+            writer = new DataWriter(stream);
+            new PART().Upscale(reader, writer, upsize);
         }
     }
 }

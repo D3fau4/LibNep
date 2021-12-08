@@ -23,6 +23,7 @@ namespace LibNep.CLI
                     break;
                 case "SSA":
                     SSA ssa = new SSA(args[1]);
+                    ssa.Upscale(2);
                     break;
             }
         }
