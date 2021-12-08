@@ -22,21 +22,24 @@ namespace LibNep.FileFormats
         {
             var stream = DataStreamFactory.FromFile(path, FileOpenMode.Read);
             reader = new DataReader(stream);
+            reader.DefaultEncoding = Encoding.GetEncoding(932);
             load();
         }
         public SSA(Stream stream)
         {
             var stream2 = DataStreamFactory.FromStream(stream);
             reader = new DataReader(stream2);
+            reader.DefaultEncoding = Encoding.GetEncoding(932);
             load();
         }
         public SSA(DataStream stream)
         {
             reader = new DataReader(stream);
+            reader.DefaultEncoding = Encoding.GetEncoding(932);
             load();
         }
 
-        internal void load()
+        private void load()
         {
             var origin = reader.Stream.Position;
 
@@ -45,23 +48,20 @@ namespace LibNep.FileFormats
             if (magic[0] != _magic[0] || magic[1] != _magic[1] || magic[2] != _magic[2] || magic[3] != _magic[3])
                 throw new Exception("Sistema de archivos no reconocido");
 
-            reader.Stream.Seek(0x4 + origin, SeekMode.Start);
             version = reader.ReadInt32();
 
             // Read the number of entrys/parts
-            reader.Stream.Seek(0x14 + origin);
+            reader.SkipPadding(0x14);
             PartsCount = reader.ReadInt32();
             
             // Frames per second (?)
-            reader.Stream.Seek(0x18 + origin);
             FPS = reader.ReadInt32();
             
-            // UNK bytes
-            reader.Stream.Seek(0x1C + origin);
+            // Scale bytes
             var Unk1 = reader.ReadInt32();
 
             // Read parts
-            PART[] parts = PART.GetPARTs(reader, PartsCount);
+            List<PART> parts = new PART().GetPARTs(reader, PartsCount);
         }
     }
 }

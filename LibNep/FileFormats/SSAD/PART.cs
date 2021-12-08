@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Yarhl.IO;
 
@@ -6,131 +7,232 @@ namespace LibNep.FileFormats.SSAD
 {
     public class PART
     {
-        static public byte[] magic = { 0x50, 0x41, 0x52, 0x54 };
+        public struct AREA
+        {
+            public int Size;
+            public int UNK;
+            public int X;
+            public int Y;
+        }
+
+        public struct ORG
+        {
+            public int _X;
+            public int[] X;
+            public int _Y;
+            public int[] Y;
+        }
+
+        public struct POS
+        {
+            public int _X;
+            public int[] X;
+            public int _Y;
+            public int[] Y;
+        }
+
+        public struct SCA
+        {
+            public int _X;
+            public int[] X;
+            public int _Y;
+            public int[] Y;
+        }
+
+        public readonly byte[] PART_magic = { 0x50, 0x41, 0x52, 0x54 };
+        public readonly byte[] POSX_magic = { 0x50, 0x4F, 0x53, 0x58 };
+        public readonly byte[] POSY_magic = { 0x50, 0x4F, 0x53, 0x59 };
+        public readonly byte[] SCAX_magic = { 0x53, 0x43, 0x41, 0x58 };
+        public readonly byte[] SCAY_magic = { 0x53, 0x43, 0x41, 0x59 };
         public int Version = 0;
         public int Index = 0;
         public string Name = "";
-        public int Sprite_positionX = 0;
-        public int Sprite_positionY = 0;
+        public AREA _area;
+        public ORG _org;
+        public POS _pos;
+        public SCA _sca;
 
-        public static PART[] GetPARTs(DataReader reader, int numberofentrys)
+        public List<PART> GetPARTs(DataReader reader, int numberofentrys)
         {
-            PART[] parts = new PART[numberofentrys];
-            reader.Stream.Seek(0x20, SeekMode.Start);
+            List<PART> parts = new List<PART>();
+            //reader.SkipPadding(0x20);
             var origin = reader.Stream.Position;
-            for (int i = 1; i < numberofentrys; i++)
+            for(int p = 0; p < numberofentrys; p++)
             {
-                Console.WriteLine(reader.Stream.Position.ToString("x"));
-                parts[i] = new PART();
-                // First PART
-                var _magic = reader.ReadBytes(4);
-                if (magic[0] != _magic[0] || magic[1] != _magic[1] || magic[2] != _magic[2] || magic[3] != _magic[3])
-                    throw new Exception("Incorrect file format");
+                PART part = new PART();
+                while (true)
+                {
+                    var _magic = reader.ReadBytes(4);
+                    if (PART_magic[0] != _magic[0] || PART_magic[1] != _magic[1] || PART_magic[2] != _magic[2] || PART_magic[3] != _magic[3])
+                    {
+                        // No hacer nada
+                    } else
+                    {
+                        Console.WriteLine(reader.Stream.Position.ToString("x"));
+                        break;
+                    } 
+                }
 
-                parts[i].Version = reader.ReadInt32();
-                parts[i].Index = reader.ReadInt32();
+                part.Version = reader.ReadInt32();
+                part.Index = reader.ReadInt32();
 
-                // Skip NAME magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
+                // NAME magic
+                reader.Stream.Seek(0x4, SeekOrigin.Current); // Skip HEADER
                 var Namelenght = reader.ReadInt32();
-                parts[i].Name = reader.ReadString(Namelenght);
-                
-                // Skip AREA magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var arealenght = reader.ReadInt32();
-                var areadata = reader.ReadBytes(arealenght);
+                part.Name = reader.ReadString(Namelenght);
 
-                // Skip ORGX magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var ORGXLenght = reader.ReadInt32();
-                parts[i].Sprite_positionX = reader.ReadInt32();
+                // AREA magic
+                reader.Stream.Seek(0x4, SeekOrigin.Current); // Skip HEADER
+                part._area.Size = reader.ReadInt32();
+                part._area.UNK = reader.ReadInt32();
+                part._area.X = reader.ReadInt32();
+                part._area.Y = reader.ReadInt32();
 
-                // Skip ORGY magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var ORGYLenght = reader.ReadInt32();
-                parts[i].Sprite_positionY = reader.ReadInt32();
+                // ORGX
+                reader.Stream.Seek(0x8, SeekOrigin.Current); // Skip HEADER
+                var ORGXsize = reader.ReadInt32();
+                if (ORGXsize > 4)
+                {
+                    part._org.X = new int[ORGXsize / 4];
+                    for (int i = 0; i < _org.X.Length; i++)
+                    {
+                        part._org.X[i] = reader.ReadInt32();
+                    }
+                } 
+                else
+                {
+                    part._org._X = reader.ReadInt32();
+                }
 
-                // Skip TDBT magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var TDBTLenght = reader.ReadInt32();
-                int[] TDBTData = new int[TDBTLenght / 4];
-                for (int x = 0; x < TDBTData.Length; x++)
-                    TDBTData[x] = reader.ReadInt32();
+                // ORGY
+                reader.Stream.Seek(0x4, SeekOrigin.Current); // Skip HEADER
+                var ORGYsize = reader.ReadInt32();
+                if (ORGYsize > 4)
+                {
+                    part._org.Y = new int[ORGYsize / 4];
+                    for (int i = 0; i < part._org.X.Length; i++)
+                    {
+                        part._org.Y[i] = reader.ReadInt32();
+                    }
+                }
+                else
+                {
+                    part._org._Y = reader.ReadInt32();
+                }
 
-                // Skip MYID magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var MYIDLenght = reader.ReadInt32();
-                int[] MYIDData = new int[MYIDLenght / 4];
-                for (int x = 0; x < MYIDData.Length; x++)
-                    MYIDData[x] = reader.ReadInt32();
+                // Search POSX
+                while (true)
+                {
+                    var bytes = reader.ReadBytes(4);
+                    if (bytes[0] != POSX_magic[0] || bytes[1] != POSX_magic[1] || bytes[2] != POSX_magic[2] || bytes[3] != POSX_magic[3]) 
+                    {
+                        // No hacer nada
+                    } 
+                    else
+                    {
+                        var POSXsize = reader.ReadInt32();
+                        if (POSXsize > 4)
+                        {
+                            part._pos.X = new int[POSXsize / 4];
+                            for (int i = 0; i < part._pos.X.Length; i++)
+                            {
+                                part._pos.X[i] = reader.ReadInt32();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            part._pos._X = reader.ReadInt32();
+                            break;
+                        }
+                    }
+                }
 
-                // Skip PAID magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var PAIDLenght = reader.ReadInt32();
-                int[] PAIDData = new int[PAIDLenght / 4];
-                for (int x = 0; x < PAIDData.Length; x++)
-                    PAIDData[x] = reader.ReadInt32();
+                // Search POSY
+                while (true)
+                {
+                    var bytes = reader.ReadBytes(4);
+                    if (bytes[0] != POSY_magic[0] || bytes[1] != POSY_magic[1] || bytes[2] != POSY_magic[2] || bytes[3] != POSY_magic[3])
+                    {
+                        // No hacer nada
+                    }
+                    else
+                    {
+                        var POSYsize = reader.ReadInt32();
+                        if (POSYsize > 4)
+                        {
+                            part._pos.Y = new int[POSYsize / 4];
+                            for (int i = 0; i < part._pos.Y.Length; i++)
+                            {
+                                part._pos.Y[i] = reader.ReadInt32();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            part._pos._Y = reader.ReadInt32();
+                            break;
+                        }
+                    }
+                }
 
-                // Skip CHIP magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var CHIPLenght = reader.ReadInt32();
-                int[] CHIPData = new int[CHIPLenght / 4];
-                for (int x = 0; x < CHIPData.Length; x++)
-                    CHIPData[x] = reader.ReadInt32();
+                // Search SCAX
+                while (true)
+                {
+                    var bytes = reader.ReadBytes(4);
+                    if (bytes[0] != SCAX_magic[0] || bytes[1] != SCAX_magic[1] || bytes[2] != SCAX_magic[2] || bytes[3] != SCAX_magic[3])
+                    {
+                        // No hacer nada
+                    }
+                    else
+                    {
+                        var SCAXsize = reader.ReadInt32();
+                        if (SCAXsize > 4)
+                        {
+                            part._sca.X = new int[SCAXsize / 4];
+                            for (int i = 0; i < part._sca.X.Length; i++)
+                            {
+                                part._sca.X[i] = reader.ReadInt32();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            part._sca._X = reader.ReadInt32();
+                            break;
+                        }
+                    }
+                }
 
-                // Skip PCID magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var PCIDLenght = reader.ReadInt32();
-                int[] PCIDData = new int[PCIDLenght / 4];
-                for (int x = 0; x < PCIDData.Length; x++)
-                    PCIDData[x] = reader.ReadInt32();
+                // Search SCAY
+                while (true)
+                {
+                    var bytes = reader.ReadBytes(4);
+                    if (bytes[0] != SCAY_magic[0] || bytes[1] != SCAY_magic[1] || bytes[2] != SCAY_magic[2] || bytes[3] != SCAY_magic[3])
+                    {
+                        // No hacer nada
+                    }
+                    else
+                    {
+                        var SCAYsize = reader.ReadInt32();
+                        if (SCAYsize > 4)
+                        {
+                            part._sca.Y = new int[SCAYsize / 4];
+                            for (int i = 0; i < part._sca.Y.Length; i++)
+                            {
+                                part._sca.Y[i] = reader.ReadInt32();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            part._sca._Y = reader.ReadInt32();
+                            break;
+                        }
+                    }
+                }
 
-                // Skip SUCD magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var SUCDLenght = reader.ReadInt32();
-                int[] SUCDData = new int[SUCDLenght / 4];
-                for (int x = 0; x < SUCDData.Length; x++)
-                    SUCDData[x] = reader.ReadInt32();
-
-                // Skip POSX magic
-                Console.WriteLine(reader.Stream.Position.ToString("x"));
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var POSXLenght = reader.ReadInt32();
-                int[] POSXData = new int[POSXLenght / 4];
-                for (int x = 0; x < POSXData.Length; x++)
-                    POSXData[x] = reader.ReadInt32();
-
-                reader.Stream.Seek(0x8, SeekMode.Current);
-
-                // Skip POSY magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var POSYLenght = reader.ReadInt32();
-                int[] POSYData = new int[POSYLenght / 4];
-                for (int x = 0; x < POSYData.Length; x++)
-                    POSYData[x] = reader.ReadInt32();
-
-                // Padding (?)
-                reader.Stream.Seek(0x8, SeekMode.Current);
-
-                // Skip TRAN magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var TRANLenght = reader.ReadInt32();
-                int[] TRANData = new int[TRANLenght / 4];
-                for (int x = 0; x < TRANData.Length; x++)
-                    TRANData[x] = reader.ReadInt32();
-
-                // Padding (?)
-                reader.Stream.Seek(0x8, SeekMode.Current);
-
-                //Skip HIDE magic
-                reader.Stream.Seek(0x4, SeekMode.Current);
-                var HIDELenght = reader.ReadInt32();
-                byte[] HIDEData = reader.ReadBytes(HIDELenght);
-                
-                reader.Stream.Seek(0x8, SeekMode.Current);
-                var key = reader.ReadString(4);
-                if (key != "UDAT" && key != "PART")
-                    throw new Exception("Key desconocida");
+                parts.Add(part);
             }
             return parts;
         }
