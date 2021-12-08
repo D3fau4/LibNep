@@ -26,23 +26,20 @@ namespace LibNep.FileFormats
             var stream = DataStreamFactory.FromFile(path, FileOpenMode.Read);
             reader = new DataReader(stream);
             reader.DefaultEncoding = Encoding.GetEncoding(932);
-            load();
         }
         public SSA(Stream stream)
         {
             var stream2 = DataStreamFactory.FromStream(stream);
             reader = new DataReader(stream2);
             reader.DefaultEncoding = Encoding.GetEncoding(932);
-            load();
         }
         public SSA(DataStream stream)
         {
             reader = new DataReader(stream);
             reader.DefaultEncoding = Encoding.GetEncoding(932);
-            load();
         }
 
-        private void load()
+        public void load()
         {
             var origin = reader.Stream.Position;
 
