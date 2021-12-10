@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using LibNep.FileFormats;
 using LibNep.Utils;
 
@@ -36,7 +36,13 @@ namespace LibNep.CLI
                             if (int.TryParse(args[2], out int result))
                             {
                                 SSA ssa = new SSA(args[3]);
-                                ssa.Upscale(result);
+                                var stream = ssa.Upscale(result);
+                                using (var f = File.Open("out", FileMode.OpenOrCreate))
+                                {
+                                    f.Seek(0, SeekOrigin.Begin);
+                                    f.CopyTo(stream);
+                                    f.Close();
+                                }
                             }
                         } else
                         {

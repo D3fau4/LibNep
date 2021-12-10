@@ -64,14 +64,17 @@ namespace LibNep.FileFormats
             List<PART> parts = new PART().GetPARTs(reader, PartsCount);
         }
 
-        public void Upscale(int upsize)
+        public Stream Upscale(int upsize)
         {
+
             reader.Stream.Position = 0;
             if (!Directory.Exists("output"))
                 Directory.CreateDirectory("output");
-            var stream = DataStreamFactory.FromFile(Path.Combine("output", Path.GetFileName(filepath)), FileOpenMode.Write);
+            var stream = DataStreamFactory.FromMemory();
             writer = new DataWriter(stream);
             new PART().Upscale(reader, writer, upsize);
+            
+            return writer.Stream;
         }
     }
 }
