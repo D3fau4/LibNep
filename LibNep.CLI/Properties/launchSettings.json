@@ -2,7 +2,7 @@
   "profiles": {
     "LibNep.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "SSA \"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Neptunia Rebirth2\\data\\GAME00001\\title\\parts\\menu04.ssa\""
+      "commandLineArgs": "SSA  --upscale 2 \"E:\\SteamLibrary\\steamapps\\common\\Hyperdimension Neptunia Re;Birth3\\data\\GAME00003\\title\\parts\\cursor01.ssa\""
     }
   }
 }

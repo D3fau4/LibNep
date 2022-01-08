@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibNep", "LibNep\LibNep.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibNep.CLI", "LibNep.CLI\LibNep.CLI.csproj", "{9566CB1E-7415-468E-B00D-1E24464AF771}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{D92768E6-0D9C-4CD2-B6A0-44E8540331DD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,8 +21,6 @@ Global
 		{9566CB1E-7415-468E-B00D-1E24464AF771}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9566CB1E-7415-468E-B00D-1E24464AF771}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9566CB1E-7415-468E-B00D-1E24464AF771}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D92768E6-0D9C-4CD2-B6A0-44E8540331DD}.Debug|Any CPU.ActiveCfg = Debug
-		{D92768E6-0D9C-4CD2-B6A0-44E8540331DD}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
