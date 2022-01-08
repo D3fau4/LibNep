@@ -96,7 +96,7 @@ namespace LibNep.FileFormats.SSAD
                 }
             } catch (Exception ex)
             {
-                writer.Write('\0');
+                //writer.Write('\0');
             }
         }
 

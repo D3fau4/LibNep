@@ -17,13 +17,14 @@ namespace LibNep.FileFormats
         int version;
         int PartsCount;
         int FPS;
+        Stream stream;
         PART[] parts;
         string filepath;
 
         public SSA(string path)
         {
             filepath = path;
-            var stream = DataStreamFactory.FromFile(path, FileOpenMode.Read);
+            stream = DataStreamFactory.FromFile(path, FileOpenMode.Read);
             reader = new DataReader(stream);
             reader.DefaultEncoding = Encoding.GetEncoding(932);
         }
@@ -66,15 +67,19 @@ namespace LibNep.FileFormats
 
         public Stream Upscale(int upsize)
         {
-
-            reader.Stream.Position = 0;
-            if (!Directory.Exists("output"))
-                Directory.CreateDirectory("output");
+            reader.Stream.Seek(0, SeekOrigin.Begin);
             var stream = DataStreamFactory.FromMemory();
             writer = new DataWriter(stream);
             new PART().Upscale(reader, writer, upsize);
             
             return writer.Stream;
+        }
+
+        public void Close()
+        {
+            reader.Stream.Close();
+            writer.Stream.Close();
+            stream.Close();
         }
     }
 }

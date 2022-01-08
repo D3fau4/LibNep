@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31521.260
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibNep", "LibNep\LibNep.csproj", "{F871A3DA-1F83-42F2-AA0D-25DA69F5030E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibNep", "LibNep\LibNep.csproj", "{F871A3DA-1F83-42F2-AA0D-25DA69F5030E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibNep.CLI", "LibNep.CLI\LibNep.CLI.csproj", "{9566CB1E-7415-468E-B00D-1E24464AF771}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibNep.CLI", "LibNep.CLI\LibNep.CLI.csproj", "{9566CB1E-7415-468E-B00D-1E24464AF771}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{D92768E6-0D9C-4CD2-B6A0-44E8540331DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,8 @@ Global
 		{9566CB1E-7415-468E-B00D-1E24464AF771}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9566CB1E-7415-468E-B00D-1E24464AF771}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9566CB1E-7415-468E-B00D-1E24464AF771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D92768E6-0D9C-4CD2-B6A0-44E8540331DD}.Debug|Any CPU.ActiveCfg = Debug
+		{D92768E6-0D9C-4CD2-B6A0-44E8540331DD}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
